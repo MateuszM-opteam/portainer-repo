@@ -1,0 +1,275 @@
+{
+  "version": "2",
+  "templates": [
+    {
+      "type": 3,
+      "title": "nAxiom - Global Infrastructure",
+      "description": "Globalna infrastruktura dla nAxiom: MSSQL Server, RabbitMQ i Nginx Proxy Manager. Wymagane przed uruchomieniem aplikacji nAxiom.",
+      "note": "<p>Ten szablon wdraża usługi infrastrukturalne wymagane przez wszystkie instancje nAxiom:</p><ul><li><strong>MSSQL Server 2019</strong> - baza danych dla aplikacji (port 1443)</li><li><strong>RabbitMQ</strong> - broker wiadomości z panelem administracyjnym (port 15675)</li><li><strong>Nginx Proxy Manager</strong> - reverse proxy z panelem administracyjnym (port 81)</li></ul><p><strong>UWAGA:</strong> Uruchom ten stack <em>przed</em> uruchomieniem stosu aplikacji nAxiom.</p>",
+      "categories": ["infrastructure", "database", "messaging"],
+      "platform": "linux",
+      "logo": "https://raw.githubusercontent.com/portainer/portainer/develop/app/assets/ico/apple-touch-icon.png",
+      "repository": {
+        "url": "https://github.com/yourusername/naxiom-templates",
+        "stackfile": "naxiom-global/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "NAX_MSSQL_VERSION",
+          "label": "MSSQL Server Version",
+          "description": "Wersja obrazu Microsoft SQL Server",
+          "default": "2019-latest"
+        },
+        {
+          "name": "NAX_MSSQL_PASSWORD",
+          "label": "MSSQL SA Password",
+          "description": "Hasło dla użytkownika 'sa' w SQL Server (min. 8 znaków, małe/DUŻE litery, cyfry i znaki specjalne)",
+          "default": "p@ssw0rd"
+        },
+        {
+          "name": "NAX_MSSQL_EXPOSED_PORT",
+          "label": "MSSQL Exposed Port",
+          "description": "Port na którym będzie dostępny MSSQL Server (domyślnie 1443, aby uniknąć konfliktu z lokalnym SQL)",
+          "default": "1443"
+        },
+        {
+          "name": "NAX_MSSQL_DATA_DIR",
+          "label": "MSSQL Backup Directory",
+          "description": "Ścieżka na hoście do katalogu backupów MSSQL (format WSL: /mnt/c/...)",
+          "default": "/mnt/c/Docker/mssql"
+        },
+        {
+          "name": "NAX_NGINXPM_VERSION",
+          "label": "Nginx Proxy Manager Version",
+          "description": "Wersja Nginx Proxy Manager",
+          "default": "latest"
+        },
+        {
+          "name": "NAX_NGINXPM_ADMIN_PORT",
+          "label": "Nginx Proxy Manager Admin Port",
+          "description": "Port panelu administracyjnego NPM",
+          "default": "81"
+        },
+        {
+          "name": "NAX_RABBITMQ_VERSION",
+          "label": "RabbitMQ Version",
+          "description": "Wersja RabbitMQ (bez przyrostka -management)",
+          "default": "4.1.3"
+        },
+        {
+          "name": "NAX_RABBITMQ_USERNAME",
+          "label": "RabbitMQ Username",
+          "description": "Nazwa użytkownika RabbitMQ",
+          "default": "rabbit"
+        },
+        {
+          "name": "NAX_RABBITMQ_PASSWORD",
+          "label": "RabbitMQ Password",
+          "description": "Hasło użytkownika RabbitMQ",
+          "default": "p@ssw0rd"
+        },
+        {
+          "name": "NAX_RABBITMQ_EXPOSED_PORT",
+          "label": "RabbitMQ Management Port",
+          "description": "Port panelu administracyjnego RabbitMQ",
+          "default": "15675"
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "nAxiom - Full Application Stack",
+      "description": "Pełny stack aplikacji nAxiom z wszystkimi serwisami: API, Frontend (SPA), Auth, Admin, TenantAdmin, Workflow, Documentation, Reports i więcej.",
+      "note": "<p>Ten szablon wdraża kompletną aplikację nAxiom w wersji 1.15.5.0:</p><h4>Serwisy Backend (.NET):</h4><ul><li><strong>auth</strong> - serwis uwierzytelniania</li><li><strong>api</strong> - główne API aplikacji</li><li><strong>tenant-api</strong> - API zarządzania tenantami</li><li><strong>public-api</strong> - publiczne API</li><li><strong>mobile-api</strong> - API mobilne</li><li><strong>task-service</strong> - serwis zadań</li><li><strong>syncfusion-api</strong> - API Syncfusion</li><li><strong>telerik-reports</strong> - generator raportów</li><li><strong>documentation</strong> - dokumentacja API</li></ul><h4>Serwisy Frontend (Angular SPA):</h4><ul><li><strong>front</strong> - główna aplikacja webowa</li><li><strong>admin</strong> - panel administracyjny</li><li><strong>tenant-admin</strong> - administracja tenantami</li><li><strong>workflow</strong> - zarządzanie workflow</li></ul><h4>Proxy:</h4><ul><li><strong>nginx</strong> - reverse proxy z SSL</li></ul><p><strong>WYMAGANIA:</strong></p><ul><li>✅ Stack 'nAxiom - Global Infrastructure' musi być uruchomiony</li><li>✅ Certyfikaty SSL muszą istnieć w katalogu NAX_CERTS_DIR</li><li>✅ Obrazy Docker muszą być załadowane lokalnie</li></ul><p><strong>Dostęp po uruchomieniu:</strong></p><ul><li>🌐 TenantAdminSPA: <code>https://naxdev.local/tenantsadmin</code></li><li>🌐 AdminSPA: <code>https://[tenant].naxdev.local/admin</code></li><li>🌐 FrontSPA: <code>https://[tenant].naxdev.local/front</code></li></ul>",
+      "categories": ["application", "enterprise", "dotnet"],
+      "platform": "linux",
+      "logo": "https://raw.githubusercontent.com/portainer/portainer/develop/app/assets/ico/apple-touch-icon.png",
+      "repository": {
+        "url": "https://github.com/yourusername/naxiom-templates",
+        "stackfile": "build-new/docker-compose.yaml"
+      },
+      "env": [
+        {
+          "name": "NAX_VERSION",
+          "label": "nAxiom Version",
+          "description": "Wersja aplikacji nAxiom (tag obrazów Docker)",
+          "default": "1.15.5.0"
+        },
+        {
+          "name": "DOMAIN_NAME",
+          "label": "Domain Name",
+          "description": "Nazwa domeny dla aplikacji (np. naxdev.local)",
+          "default": "naxdev.local"
+        },
+        {
+          "name": "DEPLOY_TYPE",
+          "label": "Deployment Type",
+          "description": "Typ wdrożenia",
+          "default": "PROXY",
+          "select": [
+            {
+              "text": "Proxy (z Nginx)",
+              "value": "PROXY",
+              "default": true
+            },
+            {
+              "text": "Direct",
+              "value": "DIRECT"
+            }
+          ]
+        },
+        {
+          "name": "NAX_CERTS_DIR",
+          "label": "Certificates Directory",
+          "description": "Ścieżka do katalogu z certyfikatami SSL (format WSL: /mnt/c/...)",
+          "default": "/mnt/c/Users/mmytych/VSCode/Docker-nAxiom-WinStarter/build/naxdev.local/certs"
+        },
+        {
+          "name": "NAX_ROOT_CERTIFICATE",
+          "label": "Root Certificate Name",
+          "description": "Nazwa pliku certyfikatu wewnętrznego (bez rozszerzenia)",
+          "default": "d4r-internal"
+        },
+        {
+          "name": "NAX_NGINX_CERTIFICATE",
+          "label": "Nginx Certificate Name",
+          "description": "Nazwa pliku certyfikatu proxy (bez rozszerzenia)",
+          "default": "d4r-proxy"
+        },
+        {
+          "name": "NAX_NGINX_VERSION",
+          "label": "Nginx Version",
+          "description": "Wersja obrazu Nginx",
+          "default": "latest"
+        },
+        {
+          "name": "NAX_RABBITMQ_VERSION",
+          "label": "RabbitMQ Version",
+          "description": "Wersja RabbitMQ (musi być zgodna z Global Infrastructure)",
+          "default": "4.1.3"
+        },
+        {
+          "name": "NAX_RABBITMQ_USERNAME",
+          "label": "RabbitMQ Username",
+          "description": "Nazwa użytkownika RabbitMQ (musi być zgodna z Global Infrastructure)",
+          "default": "rabbit"
+        },
+        {
+          "name": "NAX_RABBITMQ_PASSWORD",
+          "label": "RabbitMQ Password",
+          "description": "Hasło RabbitMQ (musi być zgodne z Global Infrastructure)",
+          "default": "p@ssw0rd"
+        },
+        {
+          "name": "NAX_RABBITMQ_EXPOSED_PORT",
+          "label": "RabbitMQ Management Port",
+          "description": "Port panelu RabbitMQ (musi być zgodny z Global Infrastructure)",
+          "default": "15675"
+        },
+        {
+          "name": "NAX_RABBITMQ_DATA_DIR",
+          "label": "RabbitMQ Data Directory",
+          "description": "Ścieżka do danych RabbitMQ",
+          "default": "/c/naxiomdockerstructure/rabbitmq/naxdev.local"
+        },
+        {
+          "name": "NAX_MSSQL_HOST",
+          "label": "MSSQL Server Host",
+          "description": "Adres serwera MSSQL (nazwa kontenera lub host.docker.internal)",
+          "default": "naxiom-global-mssql"
+        },
+        {
+          "name": "NAX_MSSQL_DATABASE",
+          "label": "MSSQL Database Name",
+          "description": "Nazwa bazy danych dla TenantAPI",
+          "default": "tenantsAdmin"
+        },
+        {
+          "name": "NAX_MSSQL_USERNAME",
+          "label": "MSSQL Username",
+          "description": "Użytkownik SQL Server",
+          "default": "sa"
+        },
+        {
+          "name": "NAX_MSSQL_PASSWORD",
+          "label": "MSSQL Password",
+          "description": "Hasło SQL Server (musi być zgodne z Global Infrastructure)",
+          "default": "p@ssw0rd"
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "nAxiom - Minimal Stack (First Tenant Setup)",
+      "description": "Minimalny stack nAxiom do utworzenia pierwszego tenanta: TenantAPI, TenantAdmin, Auth i Nginx. Uruchom przed pełnym stackiem.",
+      "note": "<p>Ten szablon wdraża <strong>minimalną konfigurację</strong> nAxiom wymaganą do utworzenia pierwszego tenanta:</p><ul><li><strong>tenant-api</strong> - API zarządzania tenantami</li><li><strong>tenant-admin</strong> - aplikacja SPA do zarządzania tenantami</li><li><strong>auth</strong> - serwis uwierzytelniania</li><li><strong>nginx</strong> - reverse proxy</li><li><strong>rabbitmq</strong> - broker wiadomości</li></ul><p><strong>Kroki po wdrożeniu:</strong></p><ol><li>Otwórz <code>https://naxdev.local/tenantsadmin</code></li><li>Utwórz pierwszego tenanta (np. 'app1')</li><li>Zatrzymaj ten stack</li><li>Uruchom pełny stack 'nAxiom - Full Application Stack'</li></ol><p><strong>WYMAGANIA:</strong> Stack 'nAxiom - Global Infrastructure' musi być uruchomiony.</p>",
+      "categories": ["application", "setup"],
+      "platform": "linux",
+      "logo": "https://raw.githubusercontent.com/portainer/portainer/develop/app/assets/ico/apple-touch-icon.png",
+      "repository": {
+        "url": "https://github.com/yourusername/naxiom-templates",
+        "stackfile": "build-new/docker-compose-minimal.yaml"
+      },
+      "env": [
+        {
+          "name": "NAX_VERSION",
+          "label": "nAxiom Version",
+          "default": "1.15.5.0"
+        },
+        {
+          "name": "DOMAIN_NAME",
+          "label": "Domain Name",
+          "default": "naxdev.local"
+        },
+        {
+          "name": "DEPLOY_TYPE",
+          "label": "Deployment Type",
+          "default": "PROXY",
+          "preset": true
+        },
+        {
+          "name": "NAX_CERTS_DIR",
+          "label": "Certificates Directory",
+          "default": "/mnt/c/Users/mmytych/VSCode/Docker-nAxiom-WinStarter/build/naxdev.local/certs"
+        },
+        {
+          "name": "NAX_ROOT_CERTIFICATE",
+          "label": "Root Certificate Name",
+          "default": "d4r-internal",
+          "preset": true
+        },
+        {
+          "name": "NAX_NGINX_CERTIFICATE",
+          "label": "Nginx Certificate Name",
+          "default": "d4r-proxy",
+          "preset": true
+        },
+        {
+          "name": "NAX_MSSQL_HOST",
+          "label": "MSSQL Server Host",
+          "default": "naxiom-global-mssql"
+        },
+        {
+          "name": "NAX_MSSQL_DATABASE",
+          "label": "MSSQL Database Name",
+          "default": "tenantsAdmin"
+        },
+        {
+          "name": "NAX_MSSQL_PASSWORD",
+          "label": "MSSQL Password",
+          "default": "p@ssw0rd"
+        },
+        {
+          "name": "NAX_RABBITMQ_USERNAME",
+          "label": "RabbitMQ Username",
+          "default": "rabbit"
+        },
+        {
+          "name": "NAX_RABBITMQ_PASSWORD",
+          "label": "RabbitMQ Password",
+          "default": "p@ssw0rd"
+        }
+      ]
+    }
+  ]
+}
