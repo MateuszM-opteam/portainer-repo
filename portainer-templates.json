@@ -10,7 +10,7 @@
       "platform": "linux",
       "logo": "https://raw.githubusercontent.com/portainer/portainer/develop/app/assets/ico/apple-touch-icon.png",
       "repository": {
-        "url": "https://github.com/yourusername/naxiom-templates",
+        "url": "https://github.com/MateuszM-opteam/portainer-repo",
         "stackfile": "naxiom-global/docker-compose.yml"
       },
       "env": [
@@ -273,3 +273,4 @@
     }
   ]
 }
+
